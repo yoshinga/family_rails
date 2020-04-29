@@ -2,6 +2,6 @@
 
 class PostsController < ApplicationController
   def index
-    puts "hello"
+       puts 'hello'
   end
 end
