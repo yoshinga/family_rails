@@ -1,0 +1,9 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - db/schema.rb
+    - config/unicorn.rb
+    - config/unicorn_staging.rb
+    - tmp/**/*
+  EnabledByDefault: true
