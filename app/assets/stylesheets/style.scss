@@ -1,0 +1,37 @@
+body {
+
+    header {
+        background-color: #bbb;
+
+        h1 {
+            font-size: 20px;
+            margin: 0;
+            padding: 10px;
+            color: #666;
+        }
+    }
+
+    main {
+
+        .content {
+            max-width: 650px;
+            margin: 0 auto;
+            
+            .menu {
+                width: 230px;
+                background-color: #FEC1CB;
+                border-radius: 13px;
+                margin: 0 auto;
+                
+                p {
+                    font-size: 20px;
+                    color: #666;
+                    font-weight: bold;
+                    padding: 20px 30px;
+                    text-align: center;
+                    
+                }
+            }
+        }
+    }
+}

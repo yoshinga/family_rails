@@ -1,0 +1,31 @@
+body header {
+  background-color: #bbb;
+}
+
+body header h1 {
+  font-size: 20px;
+  margin: 0;
+  padding: 10px;
+  color: #666;
+}
+
+body main .content {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+body main .content .menu {
+  width: 230px;
+  background-color: #FEC1CB;
+  border-radius: 13px;
+  margin: 0 auto;
+}
+
+body main .content .menu p {
+  font-size: 20px;
+  color: #666;
+  font-weight: bold;
+  padding: 20px 30px;
+  text-align: center;
+}
+/*# sourceMappingURL=style.css.map */
