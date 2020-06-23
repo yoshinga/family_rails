@@ -1,0 +1,32 @@
+/ doctype html
+/ html
+/   head
+/     title Family Rails
+/     = csrf_meta_tags %
+/     = csp_meta_tag %
+/
+/     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': true
+/     = javascript_include_tag 'application', 'data-turbolinks-track': true
+/   body
+/
+DOCTYPE
+html
+  head
+    meta charset="UTF-8" /
+    meta content="width=device-width, initial-scale=1.0" name="viewport" /
+    title Family Rails
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    / link href="css/style.css" rel="stylesheet" /
+    / link href="css/sanitize.css" rel="stylesheet" /
+
+  body
+    header
+      h1 Family Rails
+    == yield
+
+    / header#header
+    /   h1.title.logo Slim Test
+    /
+    / == yield

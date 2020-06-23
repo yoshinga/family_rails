@@ -1,24 +1,10 @@
-doctype html
-html lang="en"
-  head
-    meta charset="UTF-8" /
-    meta content="width=device-width, initial-scale=1.0" name="viewport" /
-    link href="css/style.css" rel="stylesheet" /
-    link href="css/sanitize.css" rel="stylesheet" /
-    title Family Rails
-  body
-    header
-      h1 Family Rails
-    main
-      .content
-        .daiary.menu
-          p 母日記
-        = link_to root_path do
-          .ribrary.menu
-            p ライブラリー
-        .none.menu
-          p 未定
-        .none.menu
-          p 未定
-    footer
-
+.content
+  .daiary.menu
+    p 母日記
+  = link_to books_path do
+    .ribrary.menu
+      p ライブラリー
+  .none.menu
+    p 未定
+  .none.menu
+    p 未定
