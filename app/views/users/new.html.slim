@@ -1,0 +1,6 @@
+.content
+  = form_with url: users_path do |form|
+    .class nickname
+    = form.text_field :nickname
+    .class
+    = form.submit

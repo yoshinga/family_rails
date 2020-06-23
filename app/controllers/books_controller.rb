@@ -24,6 +24,8 @@ class BooksController < ApplicationController
     )
   end
 
+  private
+
   def http_post(path, title, price, author, link)
     uri = URI.parse("https://library-nippo.herokuapp.com/#{path}")
     headers = { 'Authorization' => 'Bearer secret_key' }
