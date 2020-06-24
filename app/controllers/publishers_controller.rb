@@ -1,24 +1,23 @@
-class UsersController < ApplicationController
+require 'net/http'
+class PublishersController < ApplicationController
   def new; end
 
   def create
-    path = 'users'
-    @user = http_post(
+    path = 'publishers'
+    @publisher = http_post(
       path,
-      user_params["nickname"],
+      publisher_params["publisher"],
     )
   end
 
   private
 
-  def http_post(path, nickname)
+  def http_post(path, publisher)
     uri = URI.parse("https://library-nippo.herokuapp.com/#{path}")
     headers = { 'Authorization' => 'Bearer secret_key' }
 
     params = {
-      'role' => '1',
-      'uid' => '2',
-      'nickname' => nickname,
+      'publisher' => publisher,
     }
 
     begin
@@ -30,7 +29,7 @@ class UsersController < ApplicationController
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.set_form_data(params)
 
-      response = http.request(request)
+      res = http.request(request)
 
       case response
       when Net::HTTPSuccess
@@ -52,8 +51,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def user_params
-    params.permit(:nickname)
+  def publisher_params
+    params.permit(:publisher)
   end
-
 end

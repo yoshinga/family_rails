@@ -1,2 +1,33 @@
 .content
-  - @books
+  = link_to new_book_path do
+    .button 本を追加する
+  table
+    thead
+      tr
+        th title
+        th price
+        th author
+        th link
+        th rent user
+        th publisher
+        th colspan="2"
+    tbody
+      - @books.each do |book|
+        tr
+          td = book["attributes"]["title"]
+          td = book["attributes"]["price"]
+          td = book["attributes"]["author"]
+          td = book["attributes"]["link"]
+          td = book["attributes"]["rent-user"] || '貸出可'
+          td = book["attributes"]["publisher-name"]
+          td = link_to edit_book_path(book["id"]) do
+               .button 編集
+          td = link_to edit_book_path(book["id"]) do
+               .button 削除
+          td = link_to edit_book_path(book["id"]) do
+               .button 編集
+          td = form_with method: :patch, url: rent_book_path(book["id"]) do |form|
+               = hidden_field_tag :uid, '1'
+               = form.submit "借りる"
+          td = form_with method: :patch, url: return_book_path(book["id"]) do |form|
+               = form.submit "返す"
