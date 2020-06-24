@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  # before_action :authenticate_user!
   require 'net/http'
   require 'uri'
   require 'json'
@@ -6,7 +7,6 @@ class BooksController < ApplicationController
   def index
     path = 'books'
     @books = http(path)["data"]
-    binding.pry
   end
 
   def new
