@@ -5,19 +5,21 @@ class UsersController < ApplicationController
     path = 'users'
     @user = http_post(
       path,
+      user_params["uid"],
       user_params["nickname"],
     )
+    redirect_to root_path
   end
 
   private
 
-  def http_post(path, nickname)
+  def http_post(path, uid, nickname)
     uri = URI.parse("https://library-nippo.herokuapp.com/#{path}")
     headers = { 'Authorization' => 'Bearer secret_key' }
 
     params = {
       'role' => '1',
-      'uid' => '2',
+      'uid' => uid,
       'nickname' => nickname,
     }
 
@@ -31,6 +33,7 @@ class UsersController < ApplicationController
       request.set_form_data(params)
 
       response = http.request(request)
+      binding.pry
 
       case response
       when Net::HTTPSuccess
@@ -53,7 +56,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:nickname)
+    params.permit(:nickname, :uid)
   end
 
 end

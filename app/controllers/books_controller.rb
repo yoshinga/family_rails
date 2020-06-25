@@ -40,14 +40,13 @@ class BooksController < ApplicationController
     path = "books/#{params[:id]}/return_book"
     @book = http_patch(
       path,
-      nil
     )
     redirect_to books_path
   end
 
   private
 
-  def http_patch(path, uid)
+  def http_patch(path, uid = nil)
     uri = URI.parse("https://library-nippo.herokuapp.com/#{path}")
     headers = { 'Authorization' => 'Bearer secret_key' }
 
@@ -89,10 +88,10 @@ class BooksController < ApplicationController
     headers = { 'Authorization' => 'Bearer secret_key' }
 
     params = {
-      'owner_id' => 1,
+      'owner_id' => current_user.id,
       'publisher_id' => 1,
-      'rent_user_id' => 1,
-      'purchaser_id' => 1,
+      'rent_user_id' => current_user.id,
+      'purchaser_id' => current_user.id,
       'status' => '0',
       'title' => title,
       'price' => price,
@@ -113,11 +112,12 @@ class BooksController < ApplicationController
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.set_form_data(params)
 
-      response = http.request(request)
+      res = http.request(request)
+      binding.pry
 
-      case response
+      case res
       when Net::HTTPSuccess
-        JSON.parse(response.body)
+        JSON.parse(res.body)
       when Net::HTTPRedirection
         'redirect'
       else

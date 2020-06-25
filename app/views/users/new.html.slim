@@ -2,5 +2,6 @@
   = form_with url: users_path do |form|
     .class nickname
     = form.text_field :nickname
+    = hidden_field_tag :uid, current_user.id
     .class
     = form.submit

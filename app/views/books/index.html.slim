@@ -27,7 +27,7 @@
           td = link_to edit_book_path(book["id"]) do
                .button 編集
           td = form_with method: :patch, url: rent_book_path(book["id"]) do |form|
-               = hidden_field_tag :uid, '1'
+               = hidden_field_tag :uid, current_user.id
                = form.submit "借りる"
           td = form_with method: :patch, url: return_book_path(book["id"]) do |form|
                = form.submit "返す"

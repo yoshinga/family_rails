@@ -8,12 +8,14 @@
     p 未定
   .none.menu
     p 未定
-  = link_to logout_path do
-    .ribrary.menu
-      p logout
-  = link_to login_path do
-    .ribrary.menu
-      p login
-  = link_to signup_path do
-    .ribrary.menu
-      p signup
+  - if user_signed_in?
+    = link_to logout_path do
+      .ribrary.menu
+        p logout
+  - else
+    = link_to login_path do
+      .ribrary.menu
+        p login
+    = link_to signup_path do
+      .ribrary.menu
+        p signup
