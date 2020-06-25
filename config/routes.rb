@@ -7,6 +7,10 @@ Rails.application.routes.draw do
       patch :rent_book, as: 'rent'
       patch :return_book, as: 'return'
     end
+    collection do
+      get :new_book_search, as: 'new_book_search'
+      get :predictive_search
+    end
   end
   resources :users
   resources :publishers

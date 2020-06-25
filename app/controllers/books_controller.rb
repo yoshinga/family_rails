@@ -6,12 +6,11 @@ class BooksController < ApplicationController
 
   def index
     path, action = 'books', 'get'
-    binding.pry
     @books = http(path, action)["data"]
   end
 
   def new
-
+    @today = Date.today.strftime("%Y-%m-%d")
   end
 
   def create
@@ -21,7 +20,7 @@ class BooksController < ApplicationController
       action,
       create_parameter,
     )
-    render "index"
+    redirect_to books_path
   end
 
 
@@ -46,6 +45,22 @@ class BooksController < ApplicationController
       action,
     )
     redirect_to books_path
+  end
+
+  def external_api_book
+    @books = predictive_search
+  end
+
+  def new_book_search; end
+
+  def predictive_search
+    path = "/books/predictive_search"
+    action = 'post'
+    http(
+      path,
+      action,
+      predictive_search_parameter,
+    )
   end
 
   private
@@ -76,7 +91,6 @@ class BooksController < ApplicationController
       end
 
       res = http.request(request)
-      binding.pry
 
       case res
       when Net::HTTPSuccess
@@ -102,7 +116,7 @@ class BooksController < ApplicationController
     {
       'owner_id' => current_user.id,
       'publisher_id' => 1,
-      'rent_user_id' => current_user.id,
+      'rent_user_id' => nil,
       'purchaser_id' => current_user.id,
       'status' => '0',
       'title' => book_params["title"],
@@ -111,139 +125,29 @@ class BooksController < ApplicationController
       'link' => book_params["link"],
       'latest_rent_date' => '',
       'return_date' => '',
-      'purchase_date' => '',
+      'purchase_date' => book_params["purchase_date"],
       'publication_date' => '',
     }
   end
 
   def rent_parameter
     {
-      'uid' => rent_params["uid"]
+      'uid' => rent_params["uid"],
+      'latest_rent_date' => Date.today.strftime("%Y-%m-%d"),
+    }
+  end
+
+  def predictive_search_parameter
+    {
+      'target' => params["target"]
     }
   end
 
   def book_params
-    params.permit(:title, :price, :author, :link)
+    params.permit(:title, :price, :author, :link, :purchase_date)
   end
 
   def rent_params
     params.permit(:uid)
   end
 end
-
-  # def http_patch(path, uid = nil)
-  #   uri = URI.parse("https://library-nippo.herokuapp.com/#{path}")
-  #   headers = { 'Authorization' => 'Bearer secret_key' }
-  #
-  #   params = { 'uid' => uid }
-  #
-  #   begin
-  #     http = Net::HTTP.new(uri.host, uri.port)
-  #     http.use_ssl = true
-  #     http.open_timeout = 5
-  #     http.read_timeout = 10
-  #
-  #     request = Net::HTTP::Patch.new(uri.request_uri, headers)
-  #     request.set_form_data(params)
-  #
-  #     response = http.request(request)
-  #
-  #     case response
-  #     when Net::HTTPSuccess
-  #       JSON.parse(response.body)
-  #     when Net::HTTPRedirection
-  #       'redirect'
-  #     else
-  #       'else'
-  #     end
-  #
-  #   rescue IOError => e
-  #     logger.error(e.message)
-  #   rescue TimeoutError => e
-  #     logger.error(e.message)
-  #   rescue JSON::ParserError => e
-  #     logger.error(e.message)
-  #   rescue => e
-  #     logger.error(e.message)
-  #   end
-  # end
-  #
-  # def http_post(path, title, price, author, link)
-  #   uri = URI.parse("https://library-nippo.herokuapp.com/#{path}")
-  #   headers = { 'Authorization' => 'Bearer secret_key' }
-  #
-  #   params = {
-  #     'owner_id' => current_user.id,
-  #     'publisher_id' => 1,
-  #     'rent_user_id' => current_user.id,
-  #     'purchaser_id' => current_user.id,
-  #     'status' => '0',
-  #     'title' => title,
-  #     'price' => price,
-  #     'author' => author,
-  #     'link' => link,
-  #     'latest_rent_date' => '',
-  #     'return_date' => '',
-  #     'purchase_date' => '',
-  #     'publication_date' => '',
-  #   }
-  #
-  #   begin
-  #     http = Net::HTTP.new(uri.host, uri.port)
-  #     http.use_ssl = true
-  #     http.open_timeout = 5
-  #     http.read_timeout = 10
-  #
-  #     request = Net::HTTP::Post.new(uri.request_uri, headers)
-  #     request.set_form_data(params)
-  #
-  #     res = http.request(request)
-  #
-  #     case res
-  #     when Net::HTTPSuccess
-  #       JSON.parse(res.body)
-  #     when Net::HTTPRedirection
-  #       'redirect'
-  #     else
-  #       'else'
-  #     end
-  #
-  #   rescue IOError => e
-  #     logger.error(e.message)
-  #   rescue TimeoutError => e
-  #     logger.error(e.message)
-  #   rescue JSON::ParserError => e
-  #     logger.error(e.message)
-  #   rescue => e
-  #     logger.error(e.message)
-  #   end
-  # end
-  #
-  # def http(path)
-  #   uri = URI.parse("https://library-nippo.herokuapp.com/#{path}")
-  #
-  #   begin
-  #     http = Net::HTTP.new(uri.host, uri.port)
-  #     http.use_ssl = true
-  #     http.open_timeout = 5
-  #     http.read_timeout = 10
-  #     headers = { 'Authorization' => 'Bearer secret_key' }
-  #     res = http.get(uri.request_uri, headers)
-  #
-  #     case res
-  #     when Net::HTTPSuccess
-  #       JSON.parse(res.body)
-  #     when Net::HTTPRedirection
-  #     else
-  #     end
-  #
-  #   rescue IOError => e
-  #     logger.error(e.message)
-  #   rescue TimeoutError => e
-  #     logger.error(e.message)
-  #   rescue JSON::ParserError => e
-  #     logger.error(e.message)
-  #   rescue => e
-  #     logger.error(e.message)
-  #   end
-  # end

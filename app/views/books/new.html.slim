@@ -1,5 +1,5 @@
 .content
-  = link_to '#' do
+  = link_to new_book_search_books_path do
     .button GoogleBooksから追加する
   = form_with url: books_path do |form|
     .class title
@@ -10,5 +10,7 @@
     = form.text_field :author
     .class link
     = form.text_field :link
+    = hidden_field_tag :purchase_date, @today
     .class
     = form.submit
+
