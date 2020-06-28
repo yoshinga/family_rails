@@ -192,7 +192,7 @@ class BooksController < ApplicationController
   def create_book_search_parameter
     {
       'owner_id' => current_user.id,
-      'publisher_id' => 1,
+      'publisher_id' => volume_info_params[0]["publisher"],
       'rent_user_id' => nil,
       'purchaser_id' => current_user.id,
       'status' => '0',
