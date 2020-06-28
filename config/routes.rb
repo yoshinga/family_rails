@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :new_book_search, as: 'new_book_search'
+      post :create_book_search, as: 'create_book_search'
       get :predictive_search
     end
   end

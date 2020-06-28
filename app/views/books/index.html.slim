@@ -1,3 +1,7 @@
+sass:
+  table, tr, th, td
+    border: solid 1px #666
+
 .content
   = link_to new_book_path do
     .button 本を追加する
@@ -10,7 +14,7 @@
         th rent user
         th publisher
         th latest_rent_date
-        th colspan="2"
+        th colspan="4"
     tbody
       - @books.each do |book|
         tr
@@ -20,16 +24,14 @@
           td = book["attributes"]["rent-user"] || '貸出可'
           td = book["attributes"]["publisher-name"]
           td = book["attributes"]["latest-rent-date"]
-          td = link_to edit_book_path(book["id"]) do
-               .button 編集
-          td = link_to edit_book_path(book["id"]) do
-               .button 削除
-          td = link_to edit_book_path(book["id"]) do
-               .button 編集
+          td = form_with method: :get, url: edit_book_path(book["id"]) do |form|
+               = form.submit "編集"
+          td = form_with method: :delete, url: "books/#{book["id"]}", data: { confirm: 'Are you sure you want to delete it?' } do |form|
+               = form.submit "削除"
           - if book["attributes"]["rent-user"] == nil
-            td = form_with method: :patch, url: rent_book_path(book["id"]) do |form|
+            td = form_with method: :patch, url: rent_book_path(book["id"]), data: { confirm: 'Do you really want to borrow?' } do |form|
                  = hidden_field_tag :uid, current_user.id
                  = form.submit "借りる"
           - else
-            td = form_with method: :patch, url: return_book_path(book["id"]) do |form|
+            td = form_with method: :patch, url: return_book_path(book["id"]), data: { confirm: 'Do you really want to return it?' } do |form|
                  = form.submit "返す"

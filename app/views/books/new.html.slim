@@ -1,6 +1,12 @@
+sass:
+  .hidden
+    display: none
+
 .content
   = link_to new_book_search_books_path do
     .button GoogleBooksから追加する
+  = link_to books_path do
+    .button 一覧に戻る
   = form_with url: books_path do |form|
     .class title
     = form.text_field :title
@@ -10,7 +16,38 @@
     = form.text_field :author
     .class link
     = form.text_field :link
-    = hidden_field_tag :purchase_date, @today
+    .class publisher
+    input#exist checked="checked" name="exist_or_new" onchange="func1()" type="radio" value="EXIST"
+    label for="exist" exist
+    input#new name="exist_or_new" onchange="func1()" type="radio" value="NEW"
+    label for="new" new
+    .class#exist_publisher
+    = form.select :publisher_id, @publishers, include_blank: '未選択'
+    .class.hidden#new_publisher
+    = form.text_field :publisher, class: "hidden"
     .class
     = form.submit
 
+javascript:
+  function func1() {
+    let results = document.getElementsByName("exist_or_new");
+    for(let i = 0; i < results.length; i++) {
+      if(results[i].checked) {
+        let new_form = document.getElementById("publisher")
+        let new_name = document.getElementById("new_publisher")
+        let exist_form = document.getElementById("publisher_id")
+        let exist_name = document.getElementById("exist_publisher")
+        if(results[i].value == "NEW") {
+          new_form.classList.remove("hidden")
+          new_name.classList.remove("hidden")
+          exist_form.classList.add("hidden")
+          exist_name.classList.add("hidden")
+        } else if(results[i].value == "EXIST") {
+          new_form.classList.add("hidden")
+          new_name.classList.add("hidden")
+          exist_form.classList.remove("hidden")
+          exist_name.classList.remove("hidden")
+        }
+      }
+    }
+  }

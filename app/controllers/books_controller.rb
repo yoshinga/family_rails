@@ -1,5 +1,6 @@
 class BooksController < ApplicationController
   # before_action :authenticate_user!
+  before_action :get_publisher, only: [:new, :new_book_search]
   require 'net/http'
   require 'uri'
   require 'json'
@@ -10,7 +11,12 @@ class BooksController < ApplicationController
   end
 
   def new
-    @today = Date.today.strftime("%Y-%m-%d")
+    @publishers = get_publisher.map do |publisher|
+      [
+       publisher["publisher"],
+       publisher["id"]
+      ]
+    end
   end
 
   def create
@@ -23,8 +29,22 @@ class BooksController < ApplicationController
     redirect_to books_path
   end
 
+  def get_publisher
+    path, action = 'publishers', 'get'
+    http(path, action)
+  end
 
-  def edit; end
+  def edit
+  end
+
+  def destroy
+    path, action = "books/#{params[:id]}", 'delete'
+    @book = http(
+      path,
+      action,
+    )
+    redirect_to books_path
+  end
 
   def rent_book
     path = "books/#{params[:id]}/rent_book"
@@ -47,23 +67,41 @@ class BooksController < ApplicationController
     redirect_to books_path
   end
 
-  def external_api_book
-    @books = predictive_search
-  end
-
   def new_book_search; end
 
   def predictive_search
     path = "/books/predictive_search"
     action = 'post'
-    http(
+    response = http(
       path,
       action,
       predictive_search_parameter,
     )
+    @res = check_thumbnail_present(response)
+  end
+
+  def create_book_search
+    path = "/books/create_book_search"
+    action = 'post'
+    response = http(
+      path,
+      action,
+      create_book_search_parameter,
+    )
+    # res = check_thumbnail_present(response)
+    redirect_to books_path if response
   end
 
   private
+
+  def check_thumbnail_present(res)
+    no_img = { 'smallThumbnail'=>'https://books.google.co.jp/googlebooks/images/no_cover_thumb.gif'}
+    res.each do |book|
+      if book["volumeInfo"]["imageLinks"].blank?
+        book["volumeInfo"].store('imageLinks', no_img)
+      end
+    end
+  end
 
   def http(path, action, params = nil)
 
@@ -113,9 +151,15 @@ class BooksController < ApplicationController
   end
 
   def create_parameter
-    {
+    if book_params['publisher'].present?
+      publisher_key = 'publisher'
+      publisher_value = book_params["publisher"]
+    elsif book_params['publisher_id'].present?
+      publisher_key = 'publisher_id'
+      publisher_value = book_params["publisher_id"]
+    end
+    parameter = {
       'owner_id' => current_user.id,
-      'publisher_id' => 1,
       'rent_user_id' => nil,
       'purchaser_id' => current_user.id,
       'status' => '0',
@@ -125,9 +169,11 @@ class BooksController < ApplicationController
       'link' => book_params["link"],
       'latest_rent_date' => '',
       'return_date' => '',
-      'purchase_date' => book_params["purchase_date"],
+      'purchase_date' => Date.today.strftime("%Y-%m-%d"),
       'publication_date' => '',
     }
+    parameter.store("#{publisher_key}", "#{publisher_value}")
+    return parameter
   end
 
   def rent_parameter
@@ -143,11 +189,38 @@ class BooksController < ApplicationController
     }
   end
 
+  def create_book_search_parameter
+    {
+      'owner_id' => current_user.id,
+      'publisher_id' => 1,
+      'rent_user_id' => nil,
+      'purchaser_id' => current_user.id,
+      'status' => '0',
+      'title' => volume_info_params[0]["title"],
+      'price' => volume_info_params[2]["amount"],
+      'author' => volume_info_params[1][0],
+      'link' => volume_info_params[0]["infoLink"],
+      'latest_rent_date' => '',
+      'return_date' => '',
+      'purchase_date' => Date.today.strftime("%Y-%m-%d"),
+      'publication_date' => volume_info_params[0]["publishedDate"],
+    }
+  end
+
   def book_params
-    params.permit(:title, :price, :author, :link, :purchase_date)
+    params.permit(:title, :price, :author, :link, :purchase_date, :publisher_id, :publisher)
   end
 
   def rent_params
     params.permit(:uid)
+  end
+
+  def volume_info_params
+    Array.new.push(
+      params.require(:volumeInfo).permit(:title, :publisher, :publishedDate, :infoLink),
+      params.require(:volumeInfo).require(:authors),
+      params.require(:saleInfo).require(:listPrice).permit(:amount),
+      params.require(:volumeInfo).require(:imageLinks).permit(:smallThumbnail),
+    )
   end
 end
