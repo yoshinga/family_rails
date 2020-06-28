@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     member do
       patch :rent_book, as: 'rent'
       patch :return_book, as: 'return'
+      resources :comments, only: [:create, :destroy]
     end
     collection do
       get :new_book_search, as: 'new_book_search'

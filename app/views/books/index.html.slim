@@ -15,12 +15,13 @@ sass:
         th author
         th rent user
         th publisher
-        th latest_rent_date
+        th latest rent date
         th colspan="4"
     tbody
       - @books.each do |book|
         tr
-          td = book["attributes"]["title"]
+          td = link_to book_path(book["id"])
+             = book["attributes"]["title"]
           td = book["attributes"]["price"]
           td = book["attributes"]["author"]
           td = book["attributes"]["rent-user"] || '貸出可'

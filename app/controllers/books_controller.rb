@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :get_publisher, only: [:new, :new_book_search]
   require 'net/http'
   require 'uri'
@@ -35,6 +35,11 @@ class BooksController < ApplicationController
   end
 
   def edit
+  end
+
+  def show
+    path, action = "books/#{params["id"]}", 'get'
+    @book = http(path, action)["data"]
   end
 
   def destroy
@@ -88,7 +93,6 @@ class BooksController < ApplicationController
       action,
       create_book_search_parameter,
     )
-    # res = check_thumbnail_present(response)
     redirect_to books_path if response
   end
 
@@ -192,13 +196,13 @@ class BooksController < ApplicationController
   def create_book_search_parameter
     {
       'owner_id' => current_user.id,
-      'publisher_id' => volume_info_params[0]["publisher"],
       'rent_user_id' => nil,
       'purchaser_id' => current_user.id,
       'status' => '0',
       'title' => volume_info_params[0]["title"],
       'price' => volume_info_params[2]["amount"],
       'author' => volume_info_params[1][0],
+      'publisher' => volume_info_params[0]["publisher"],
       'link' => volume_info_params[0]["infoLink"],
       'latest_rent_date' => '',
       'return_date' => '',

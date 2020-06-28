@@ -1,0 +1,59 @@
+.content
+  .content_title
+  strong title
+  .content_value
+  = @book["attributes"]["title"] || 'Not entered'
+  hr
+  .content_title
+  strong price
+  .content_value
+  = @book["attributes"]["price"] || 'Not entered'
+  hr
+  .content_title
+  strong author
+  .content_value
+  = @book["attributes"]["author"] || 'Not entered'
+  hr
+  .content_title
+  strong reference link
+  .content_value
+    = link_to "#{@book["attributes"]["link"]}", "#{@book["attributes"]["link"]}" || 'Not entered'
+  hr
+  .content_title
+  strong latest rent date
+  .content_value
+  = @book["attributes"]["latest-rent-date"] || 'Not entered'
+  hr
+  .content_title
+  strong reurn date
+  .content_value
+  = @book["attributes"]["return-date"] || 'Not entered' || 'Not entered'
+  hr
+  .content_title
+  strong purchase date
+  .content_value
+  = @book["attributes"]["purchase-date"] || 'Not entered'
+  hr
+  .content_title
+  strong publication date
+  .content_value
+  = @book["attributes"]["publication-date"] || 'Not entered'
+  hr
+  .content_title
+  strong owner name
+  .content_value
+  = @book["attributes"]["owner"]["nickname"] || 'Not entered'
+  hr
+   /  {"owner"=>{"uid"=>1, "nickname"=>"bob", "role"=>1, "created_at"=>"2020-06-25T01:15:52.000Z", "updated_at"=>"2020-06-25T01:15:52.000Z"},
+   / "rent-user"=>nil,
+   / "purchaser"=>nil,
+   / "publisher-name"=>nil,
+   / "status"=>0,
+   / "title"=>"TCP/IP Sockets in Java",
+   / "price"=>2996,
+   / "author"=>"Kenneth L. Calvert",
+   / "link"=>"https://play.google.com/store/books/details?id=lfHo7uMk7r4C&source=gbs_api",
+   / "latest-rent-date"=>"2020-06-28T00:00:00.000Z",
+   / "return-date"=>nil,
+   / "purchase-date"=>"2020-06-28T00:00:00.000Z",
+   / "publication-date"=>"2011-08-29T00:00:00.000Z"}}
