@@ -9,13 +9,13 @@
   .none.menu
     p 未定
   - if user_signed_in?
-    = link_to logout_path do
+    .user_email
+      | login:
+      = current_user.email
+    = link_to destroy_user_session_path, method: :delete do
       .ribrary.menu
         p logout
   - else
-    = link_to login_path do
+    = link_to new_user_session_path do
       .ribrary.menu
         p login
-    = link_to signup_path do
-      .ribrary.menu
-        p signup
