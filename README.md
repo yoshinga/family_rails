@@ -1,7 +1,5 @@
 # Family Rails
 
-familyrails お母さんの日記
-
 **docker起動**
 
 ```
