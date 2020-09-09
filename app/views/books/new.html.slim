@@ -25,7 +25,6 @@ sass:
     = form.select :publisher_id, @publishers, include_blank: '未選択'
     .class.hidden#new_publisher
     = form.text_field :publisher, class: "hidden"
-    = hidden_field_tag :kind, 1
     .class
     = form.submit
 

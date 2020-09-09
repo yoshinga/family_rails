@@ -1,6 +1,4 @@
 .content
-  = link_to '一覧に戻る', books_path
-  h3 details
   .content_title
   strong title
   .content_value
@@ -46,23 +44,16 @@
   .content_value
   = @book["attributes"]["owner"]["nickname"] || 'Not entered'
   hr
-  h3 Comment
-  .form
-  = form_with url: comments_path do |form|
-    .class new comment
-    = form.text_field :content
-    .class
-    = hidden_field_tag :uid, current_user.id
-    .class
-    = form.submit "submit"
-    hr
-  - @comments.each do |comment|
-    | user_id:&ensp;
-    = comment["attributes"]["user-id"]
-    br
-    | content:&ensp;
-    = comment["attributes"]["content"]
-    br
-    | date:&ensp;
-    = comment["attributes"]["created-at"]
-    hr
+   /  {"owner"=>{"uid"=>1, "nickname"=>"bob", "role"=>1, "created_at"=>"2020-06-25T01:15:52.000Z", "updated_at"=>"2020-06-25T01:15:52.000Z"},
+   / "rent-user"=>nil,
+   / "purchaser"=>nil,
+   / "publisher-name"=>nil,
+   / "status"=>0,
+   / "title"=>"TCP/IP Sockets in Java",
+   / "price"=>2996,
+   / "author"=>"Kenneth L. Calvert",
+   / "link"=>"https://play.google.com/store/books/details?id=lfHo7uMk7r4C&source=gbs_api",
+   / "latest-rent-date"=>"2020-06-28T00:00:00.000Z",
+   / "return-date"=>nil,
+   / "purchase-date"=>"2020-06-28T00:00:00.000Z",
+   / "publication-date"=>"2011-08-29T00:00:00.000Z"}}

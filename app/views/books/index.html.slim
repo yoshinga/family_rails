@@ -1,16 +1,12 @@
 sass:
   table, tr, th, td
     border: solid 1px #666
-  a
-    text-decoration: none
 
 .content
   = link_to root_path do
-    | トップに戻る&ensp;&ensp;
+    .button トップに戻る
   = link_to new_book_path do
-    | 本を追加する&ensp;&ensp;
-  = link_to mypages_path do
-    | マイページに行く
+    .button 本を追加する
   table
     thead
       tr
@@ -40,5 +36,5 @@ sass:
                  = hidden_field_tag :uid, current_user.id
                  = form.submit "借りる"
           - else
-            td = form_with method: :patch, url: return_book_path(book["id"], '/books'), data: { confirm: 'Do you really want to return it?' } do |form|
+            td = form_with method: :patch, url: return_book_path(book["id"]), data: { confirm: 'Do you really want to return it?' } do |form|
                  = form.submit "返す"

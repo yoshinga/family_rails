@@ -15,6 +15,5 @@
       = book["volumeInfo"]["publisher"]
     .class
       = form_with method: :post, url: create_book_search_books_path(book) do |form|
-        = hidden_field_tag :kind_num, 1
         = form.submit "追加する"
     hr

@@ -33,6 +33,7 @@ class Api::UsersController < ApplicationController
       request.set_form_data(params)
 
       response = http.request(request)
+      binding.pry
 
       case response
       when Net::HTTPSuccess

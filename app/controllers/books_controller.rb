@@ -40,9 +40,6 @@ class BooksController < ApplicationController
   def show
     path, action = "books/#{params["id"]}", 'get'
     @book = http(path, action)["data"]
-
-    path, action = "comments/#{params["id"]}", 'get'
-    @comments = http(path, action)["data"]
   end
 
   def destroy
@@ -72,7 +69,7 @@ class BooksController < ApplicationController
       path,
       action,
     )
-    redirect_to "#{params["format"]}"
+    redirect_to books_path
   end
 
   def new_book_search; end
@@ -170,7 +167,6 @@ class BooksController < ApplicationController
       'rent_user_id' => nil,
       'purchaser_id' => current_user.id,
       'status' => '0',
-      'kind' => params["kind"],
       'title' => book_params["title"],
       'price' => book_params["price"],
       'author' => book_params["author"],
@@ -198,16 +194,14 @@ class BooksController < ApplicationController
   end
 
   def create_book_search_parameter
-    binding.pry
     {
       'owner_id' => current_user.id,
       'rent_user_id' => nil,
       'purchaser_id' => current_user.id,
       'status' => '0',
-      'kind' => params["kind_num"],
       'title' => volume_info_params[0]["title"],
-      'price' => volume_info_params[3]["amount"],
-      'author' => volume_info_params[2][0],
+      'price' => volume_info_params[2]["amount"],
+      'author' => volume_info_params[1][0],
       'publisher' => volume_info_params[0]["publisher"],
       'link' => volume_info_params[0]["infoLink"],
       'latest_rent_date' => '',
@@ -226,21 +220,11 @@ class BooksController < ApplicationController
   end
 
   def volume_info_params
-    info_params = Array.new.push(
+    Array.new.push(
       params.require(:volumeInfo).permit(:title, :publisher, :publishedDate, :infoLink),
-      params.require(:volumeInfo).require(:imageLinks).permit(:smallThumbnail)
+      params.require(:volumeInfo).require(:authors),
+      params.require(:saleInfo).require(:listPrice).permit(:amount),
+      params.require(:volumeInfo).require(:imageLinks).permit(:smallThumbnail),
     )
-    if params["volumeInfo"]["authors"]
-      info_params.push(params.require(:volumeInfo).require(:authors))
-    else
-      info_params.push([nil])
-    end
-
-    if params["saleInfo"]["listPrice"]
-      info_params.push(params.require(:saleInfo).require(:listPrice).permit(:amount))
-    else
-      info_params.push({ 'amount' => nil })
-    end
-    return info_params
   end
 end
