@@ -1,6 +1,6 @@
 .content
-  = form_with url: predictive_search_books_path, method: :get, local: true do |form|
-    .class target (english only)
+  = form_with url: predictive_search_mypages_path, method: :get, local: true do |form|
+    .class target
     = form.text_field :target
     .class
     = form.submit

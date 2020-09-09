@@ -4,20 +4,14 @@ sass:
   a
     text-decoration: none
 
-.content
-  = link_to root_path do
-    | トップに戻る&ensp;&ensp;
-  = link_to new_book_path do
-    | 本を追加する&ensp;&ensp;
-  = link_to mypages_path do
-    | マイページに行く
+= link_to '本一覧に戻る', books_path
+h3 Already borrowed books ...
+- if @books.present?
   table
     thead
       tr
         th title
         th price
-        th author
-        th rent user
         th publisher
         th latest rent date
         th colspan="4"
@@ -27,8 +21,6 @@ sass:
           td = link_to book_path(book["id"])
              = book["attributes"]["title"]
           td = book["attributes"]["price"]
-          td = book["attributes"]["author"]
-          td = book["attributes"]["rent-user"] || '貸出可'
           td = book["attributes"]["publisher-name"]
           td = book["attributes"]["latest-rent-date"]
           td = form_with method: :get, url: edit_book_path(book["id"]) do |form|
@@ -40,5 +32,9 @@ sass:
                  = hidden_field_tag :uid, current_user.id
                  = form.submit "借りる"
           - else
-            td = form_with method: :patch, url: return_book_path(book["id"], '/books'), data: { confirm: 'Do you really want to return it?' } do |form|
-                 = form.submit "返す"
+            td = form_with method: :patch, url: return_book_path(book["id"], '/mypages'), data: { confirm: 'Do you really want to return it?' } do |form|
+               = form.submit "返す"
+- else
+  | no borrowed books
+h3 Wish List for you
+= link_to 'ウィッシュリストを追加する', new_mypage_path

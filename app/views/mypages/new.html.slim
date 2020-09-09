@@ -3,7 +3,7 @@ sass:
     display: none
 
 .content
-  = link_to new_book_search_books_path do
+  = link_to new_wish_list_search_mypages_path do
     .button GoogleBooksから追加する
   = link_to books_path do
     .button 一覧に戻る
@@ -25,7 +25,7 @@ sass:
     = form.select :publisher_id, @publishers, include_blank: '未選択'
     .class.hidden#new_publisher
     = form.text_field :publisher, class: "hidden"
-    = hidden_field_tag :kind, 1
+    = hidden_field_tag :kind, 0
     .class
     = form.submit
 

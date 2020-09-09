@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     member do
       patch :rent_book, as: 'rent'
       patch :return_book, as: 'return'
-      resources :comments, only: [:create, :destroy]
+      resources :comments, only: [:show, :create, :destroy]
     end
     collection do
       get :new_book_search, as: 'new_book_search'
@@ -14,11 +14,15 @@ Rails.application.routes.draw do
       get :predictive_search
     end
   end
-
+  resources :mypages do
+    collection do
+      get :new_wish_list_search, as: 'new_wish_list_search'
+      get :predictive_search
+    end
+  end
   namespace :api do
     resources :users
   end
-
   resources :publishers
 
   devise_for :users
